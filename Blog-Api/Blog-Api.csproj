@@ -13,6 +13,10 @@
 
     <ItemGroup>
       <Folder Include="Controllers" />
+      <Folder Include="DataModel\Dtos" />
+      <Folder Include="DataModel\Entities" />
+      <Folder Include="Services\Implementations" />
+      <Folder Include="Services\Interfaces" />
     </ItemGroup>
 
 </Project>
