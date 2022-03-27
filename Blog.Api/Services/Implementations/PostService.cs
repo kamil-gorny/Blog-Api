@@ -16,8 +16,8 @@ public class PostService : IPostService
 
     public async Task<Post?> ReadPost(Guid id)
     {
-        var result =  await _context.Posts.FindAsync(id);
-        
+        var result = await _context.Posts.FindAsync(id);
+
         if (result == null)
         {
             throw new NotFoundException();
@@ -25,7 +25,7 @@ public class PostService : IPostService
 
         return result;
     }
-    
+
     public async Task CreatePost(Post post)
     {
         await _context.Posts.AddAsync(post);
@@ -45,7 +45,7 @@ public class PostService : IPostService
         await _context.SaveChangesAsync();
     }
 
-    public async Task<List<Post?>> ReadAllPosts()
+    public async Task<List<Post>> ReadAllPosts()
     {
         return await _context.Posts.ToListAsync();
     }
