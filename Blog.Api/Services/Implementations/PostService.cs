@@ -16,7 +16,7 @@ public class PostService : IPostService
 
     public async Task<Post?> ReadPost(Guid id)
     {
-        var result = await _context.Posts.FindAsync(id);
+        var result = await _context.Posts.Where(p => p.Id == id).Include(p => p.Comments).FirstOrDefaultAsync();
 
         if (result == null)
         {
