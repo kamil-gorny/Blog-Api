@@ -44,9 +44,5 @@ public class CommentService : ICommentService
         _context.Comments.Remove(result);
         await _context.SaveChangesAsync();
     }
-
-    public async Task<List<Comment>> ReadAllCommentsForPost(Guid postId)
-    {
-        return await _context.Comments.Where(c => c.PostId == postId).ToListAsync();
-    }
+    
 }

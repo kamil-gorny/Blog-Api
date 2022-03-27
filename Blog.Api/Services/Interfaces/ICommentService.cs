@@ -8,5 +8,4 @@ public interface ICommentService
     Task CreateComment(Comment post);
     Task UpdateComment(Comment comment);
     Task DeleteComment(Guid id);
-    Task<List<Comment>> ReadAllCommentsForPost(Guid postId);
 }
