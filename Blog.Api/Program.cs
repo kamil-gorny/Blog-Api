@@ -15,6 +15,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IPostService, PostService>();
 builder.Services.AddScoped<ICommentService, CommentService>();
 builder.Services.AddScoped<ITagService, TagService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 
 builder.Services.AddDbContext<BlogContext>(options => { options.UseSqlServer(""); });
