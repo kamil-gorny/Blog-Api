@@ -1,4 +1,5 @@
 using System.Linq;
+using Blog_Api.DataModel.Dtos;
 using Blog_Api.DataModel.Entities;
 using Blog_Api.Helpers;
 using Blog_Api.Services.Interfaces;
@@ -15,11 +16,20 @@ public class UserService : IUserService
         _dbContext = dbContext;
     }
 
-    public async Task AddUser(User user)
+    public async Task AddUser(UserDto userDto)
     {
+        var userEntity = new User
+        {
+            FirstName = userDto.FirstName,
+            LastName = userDto.LastName,
+            UserName = userDto.UserName,
+            Email = userDto.Email,
+            PasswordHash = null,
+            IsEmailConfirmed = null,
+        };
         await _dbContext.Database.EnsureCreatedAsync();
-        user.PasswordHash = EncryptionHelper.EncryptPassword(user.PasswordHash, user.Email);
-        await _dbContext.AddAsync(user);
+        //user.PasswordHash = EncryptionHelper.EncryptPassword(user.PasswordHash, user.Email);
+        await _dbContext.AddAsync(userEntity);
         await _dbContext.SaveChangesAsync();
     }
 

@@ -1,10 +1,11 @@
+using Blog_Api.DataModel.Dtos;
 using Blog_Api.DataModel.Entities;
 
 namespace Blog_Api.Services.Interfaces;
 
 public interface IUserService
 {
-    Task AddUser(User user);
+    Task AddUser(UserDto user);
     Task<User> GetUserById(Guid id);
     Task<User> GetUserByEmail(string email);
     Task RemoveUserById(Guid id);
