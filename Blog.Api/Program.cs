@@ -1,9 +1,12 @@
+using System.Text;
 using Blog_Api;
 using Blog_Api.Services.Implementations;
 using Blog_Api.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
+
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 // Add services to the container.
@@ -29,6 +32,18 @@ builder.Services.AddScoped<ITagService, TagService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 
+builder.Services.AddAuthentication().AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        ValidAudience = builder.Configuration["Jwt:Issuer"],
+        IssuerSigningKey = new
+            SymmetricSecurityKey
+            (Encoding.UTF8.GetBytes
+                (builder.Configuration["Jwt:Key"])),
+    };
+});
 
 builder.Services.AddDbContext<BlogContext>(options => { options.UseSqlServer(""); });
 var app = builder.Build();
@@ -40,7 +55,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 app.UseCors(MyAllowSpecificOrigins);
 app.UseAuthorization();
 app.MapControllers();
