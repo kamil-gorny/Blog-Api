@@ -10,10 +10,12 @@ namespace Blog_Api.Services.Implementations;
 public class UserService : IUserService
 {
     private readonly BlogContext _dbContext;
+    private readonly IAuthService _authService;
 
-    public UserService(BlogContext dbContext)
+    public UserService(BlogContext dbContext, IAuthService authService)
     {
         _dbContext = dbContext;
+        _authService = authService;
     }
 
     public async Task AddUser(UserDto userDto)
@@ -24,13 +26,13 @@ public class UserService : IUserService
             LastName = userDto.LastName,
             UserName = userDto.UserName,
             Email = userDto.Email,
-            PasswordHash = null,
-            IsEmailConfirmed = null,
+            PasswordHash = EncryptionHelper.EncryptPassword(userDto.Password, userDto.Email),
+            IsEmailConfirmed = false,
         };
         await _dbContext.Database.EnsureCreatedAsync();
-        //user.PasswordHash = EncryptionHelper.EncryptPassword(user.PasswordHash, user.Email);
         await _dbContext.AddAsync(userEntity);
         await _dbContext.SaveChangesAsync();
+        await _authService.ConfirmEmail(userEntity.Id);
     }
 
     public async Task<List<User>> GetUsers()

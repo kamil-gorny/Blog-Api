@@ -7,27 +7,26 @@ using Blog_Api.DataModel;
 using Blog_Api.DataModel.Entities;
 using Blog_Api.Helpers;
 using Blog_Api.Services.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Blog_Api.Services.Implementations;
 
 public class AuthService : IAuthService
 {
-    private readonly IUserService _userService;
-        private readonly IConfiguration _configuration;
+    private readonly IConfiguration _configuration;
         private readonly BlogContext _dbContext;
 
-        public AuthService(IUserService userService, IConfiguration configuration, BlogContext dbContext)
+        public AuthService(IConfiguration configuration, BlogContext dbContext)
         {
-            _userService = userService;
             _configuration = configuration;
             _dbContext = dbContext;
         }
 
         private const double ExpiryDurationMinutes = 100;
-        public async Task<string> GetToken(string email, string password)
+        public async Task<string> Login(string email, string password)
         {
-            var user = await _userService.GetUserByEmail(email);
+            var user = await _dbContext.Users.Where(u => u.Email == email).FirstOrDefaultAsync();
             if(user.PasswordHash.Equals(EncryptionHelper.EncryptPassword(password, email)))
             {
                 return GenerateToken(_configuration["Jwt:Key"], _configuration["Jwt:Issuer"], user);
@@ -66,13 +65,11 @@ public class AuthService : IAuthService
                 Credentials = new NetworkCredential(_configuration["SMTP:Email"] ,_configuration["SMTP:EmailPassword"]),
                 EnableSsl = true,
             };
-    
             smtpClient.Send(_configuration["SMTP:Email"], email, "Confirmation Email - kamilgorny.me", $"Here is your confirmation link: https://localhost:5001/api/Auth/{id}");
         }
-
         public async Task ConfirmEmail(Guid id)
         {
-            var user = await _userService.GetUserById(id);
+            var user = await _dbContext.Users.Where(u => u.Id == id).FirstOrDefaultAsync();
             user.IsEmailConfirmed = true;
             _dbContext.Update(user);
             await _dbContext.SaveChangesAsync();
