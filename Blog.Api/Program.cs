@@ -1,5 +1,6 @@
 using System.Text;
 using Blog_Api;
+using Blog_Api.Configuration;
 using Blog_Api.Services.Implementations;
 using Blog_Api.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -7,6 +8,13 @@ using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Host.ConfigureAppConfiguration((context, config) =>
+{
+    var builtConfig = config.Build();
+    var keyVaultConfig = ConfigurationSettings.GetKeyVaultConfiguration(builtConfig);
+
+    config.AddConfiguration(keyVaultConfig);
+});
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 // Add services to the container.
