@@ -1,6 +1,6 @@
 namespace Blog_Api.DataModel.Dtos;
 
-public class UserDto
+public class RegisterUserRequestModel
 {
     public string FirstName { get; set; }
     public string LastName { get; set; }

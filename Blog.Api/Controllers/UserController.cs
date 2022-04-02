@@ -17,7 +17,7 @@ public class UserController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult> PostUser(UserDto user)
+    public async Task<ActionResult> PostUser(RegisterUserRequestModel user)
     {
         try
         {

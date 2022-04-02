@@ -18,15 +18,15 @@ public class UserService : IUserService
         _authService = authService;
     }
 
-    public async Task AddUser(UserDto userDto)
+    public async Task AddUser(RegisterUserRequestModel registerUserRequestModel)
     {
         var userEntity = new User
         {
-            FirstName = userDto.FirstName,
-            LastName = userDto.LastName,
-            UserName = userDto.UserName,
-            Email = userDto.Email,
-            PasswordHash = EncryptionHelper.EncryptPassword(userDto.Password, userDto.Email),
+            FirstName = registerUserRequestModel.FirstName,
+            LastName = registerUserRequestModel.LastName,
+            UserName = registerUserRequestModel.UserName,
+            Email = registerUserRequestModel.Email,
+            PasswordHash = EncryptionHelper.EncryptPassword(registerUserRequestModel.Password, registerUserRequestModel.Email),
             IsEmailConfirmed = false,
         };
         await _dbContext.Database.EnsureCreatedAsync();

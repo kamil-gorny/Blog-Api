@@ -21,11 +21,11 @@ public class AuthController : ControllerBase
 
     [HttpPost]
     [Route("register")]
-    public async Task<IActionResult> Register(UserDto userDto)
+    public async Task<IActionResult> Register(RegisterUserRequestModel createUserRequestModel)
     {
         try
         {
-            await _userService.AddUser(userDto);
+            await _userService.AddUser(createUserRequestModel);
             return Ok();
         }
         catch (Exception ex)

@@ -5,7 +5,7 @@ namespace Blog_Api.Services.Interfaces;
 
 public interface IUserService
 {
-    Task AddUser(UserDto user);
+    Task AddUser(RegisterUserRequestModel user);
     Task<User> GetUserById(Guid id);
     Task<User> GetUserByEmail(string email);
     Task RemoveUserById(Guid id);
