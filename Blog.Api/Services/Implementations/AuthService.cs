@@ -1,9 +1,11 @@
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Net;
 using System.Net.Mail;
 using System.Security.Claims;
 using System.Text;
 using Blog_Api.DataModel;
+using Blog_Api.DataModel.Dtos;
 using Blog_Api.DataModel.Entities;
 using Blog_Api.Helpers;
 using Blog_Api.Services.Interfaces;
@@ -24,10 +26,10 @@ public class AuthService : IAuthService
         }
 
         private const double ExpiryDurationMinutes = 100;
-        public async Task<string> Login(string email, string password)
+        public async Task<string> Login(LoginRequestModel loginRequestModel)
         {
-            var user = await _dbContext.Users.Where(u => u.Email == email).FirstOrDefaultAsync();
-            if(user.PasswordHash.Equals(EncryptionHelper.EncryptPassword(password, email)))
+            var user = await _dbContext.Users.Where(u => u.Email == loginRequestModel.Email).FirstOrDefaultAsync();
+            if(user.PasswordHash.Equals(EncryptionHelper.EncryptPassword(loginRequestModel.Password, loginRequestModel.Email)))
             {
                 return GenerateToken(_configuration["Jwt:Key"], _configuration["Jwt:Issuer"], user);
             }

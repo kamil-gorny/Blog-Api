@@ -53,7 +53,7 @@ builder.Services.AddAuthentication().AddJwtBearer(options =>
     };
 });
 
-builder.Services.AddDbContext<BlogContext>(options => { options.UseSqlServer(""); });
+builder.Services.AddDbContext<BlogContext>(options => { options.UseSqlServer(builder.Configuration["Database:ConnectionString"]); });
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

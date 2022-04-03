@@ -36,11 +36,11 @@ public class AuthController : ControllerBase
 
     [HttpPost]
     [Route("login")]
-    public async Task<IActionResult> Login(string email, string password)
+    public async Task<IActionResult> Login(LoginRequestModel loginRequestModel)
     {
         try
         {
-            var result = await _authService.Login(email, password);
+            var result = await _authService.Login(loginRequestModel);
             return Ok(result);
         }
         catch (Exception ex)
