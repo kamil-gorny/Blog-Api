@@ -1,3 +1,7 @@
+using Microsoft.Azure.KeyVault;
+using Microsoft.Azure.Services.AppAuthentication;
+using Microsoft.Extensions.Configuration.AzureKeyVault;
+
 namespace Blog_Api.Configuration;
 
 public class ConfigurationSettings
