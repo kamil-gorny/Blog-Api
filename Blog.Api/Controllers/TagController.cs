@@ -9,13 +9,20 @@ namespace Blog_Api.Controllers;
 public class TagController : ControllerBase
 {
     private readonly ITagService _tagService;
-
-
-    public TagController(ITagService tagService)
+    private readonly BlogContext _context;
+    
+    public TagController(ITagService tagService, BlogContext context)
     {
         _tagService = tagService;
+        _context = context;
     }
 
+    [HttpPost]
+    public async Task<ActionResult> PostTag(Tag tag)
+    {
+        await _tagService.AddTag(tag);
+        return Ok();
+    }
     [HttpGet]
     public async Task<ActionResult<List<Tag>>> GetTags()
     {

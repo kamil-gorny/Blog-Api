@@ -13,6 +13,11 @@ public class TagService : ITagService
         _context = context;
     }
 
+    public async Task AddTag(Tag tag)
+    {
+        _context.Tags.Add(tag);
+        await _context.SaveChangesAsync();
+    }
     public async Task<Tag?> ReadTag(Guid id)
     {
         return await _context.Tags.FindAsync(id);
