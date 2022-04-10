@@ -27,6 +27,7 @@ public class UserService : IUserService
             UserName = registerUserRequestModel.UserName,
             Email = registerUserRequestModel.Email,
             PasswordHash = EncryptionHelper.EncryptPassword(registerUserRequestModel.Password, registerUserRequestModel.Email),
+            Role = "user",
             IsEmailConfirmed = false,
         };
         await _dbContext.Database.EnsureCreatedAsync();
