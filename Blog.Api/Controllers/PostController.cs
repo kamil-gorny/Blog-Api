@@ -1,13 +1,16 @@
 using Microsoft.AspNetCore.Mvc;
 using Blog_Api.DataModel.Entities;
+using Blog_Api.DataModel.Requests;
 using Blog_Api.Exceptions;
 using Blog_Api.Services.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 
 namespace Blog_Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class PostController : ControllerBase
     {
         private readonly IPostService _postService;
@@ -39,7 +42,6 @@ namespace Blog_Api.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-
         public async Task<ActionResult<List<Post>>> GetPosts()
         {
             try
@@ -73,7 +75,8 @@ namespace Blog_Api.Controllers
         }
         
         [HttpPost]
-        public async Task<ActionResult> PostPost(Post post)
+        [AllowAnonymous]
+        public async Task<ActionResult> PostPost(AddPostRequestModel post)
         {
             try
             {
