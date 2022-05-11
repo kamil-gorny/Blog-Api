@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using AutoMapper;
 using Azure.Storage.Blobs;
 using Blog_Api.DataModel.Entities;
@@ -38,8 +39,9 @@ public class PostService : IPostService
         var container = new BlobContainerClient(_configuration["BlobStorage:ConnectionString"], _configuration["BlobStorage:ContainerName"]);
         var imageName = Path.Combine(Path.GetTempPath(), Guid.NewGuid() + ".jpg");
         var blob = container.GetBlobClient($"{imageName}");
-        
-        var bytesFromBase64 = Convert.FromBase64String(postRequest.ImageBase64);
+    
+        var image = Regex.Replace(postRequest.ImageBase64, @"^data:image\/[a-zA-Z]+;base64,", string.Empty);
+        var bytesFromBase64 = Convert.FromBase64String(image);
         var streamContent = new StreamContent(new MemoryStream(bytesFromBase64));
         var stream = await streamContent.ReadAsStreamAsync();
         
