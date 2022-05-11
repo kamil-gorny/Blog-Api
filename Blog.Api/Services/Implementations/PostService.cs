@@ -36,15 +36,17 @@ public class PostService : IPostService
     public async Task CreatePost(AddPostRequestModel postRequest)
     {
         var container = new BlobContainerClient(_configuration["BlobStorage:ConnectionString"], _configuration["BlobStorage:ContainerName"]);
-        var blob = container.GetBlobClient("oki.jpg");
+        var imageName = Path.Combine(Path.GetTempPath(), Guid.NewGuid() + ".jpg");
+        var blob = container.GetBlobClient($"{imageName}");
         
         var bytesFromBase64 = Convert.FromBase64String(postRequest.ImageBase64);
         var streamContent = new StreamContent(new MemoryStream(bytesFromBase64));
         var stream = await streamContent.ReadAsStreamAsync();
-        var blobInfo = await blob.UploadAsync(stream);
+        
+        await blob.UploadAsync(stream);
         var post = _mapper.Map<Post>(postRequest);
         
-        post.ImageUrl = $"https://kamilgornystorage.blob.core.windows.net/{_configuration["BlobStorage:ContainerName"]}/oki.jpg";
+        post.ImageUrl = $"{_configuration["BlobStorage:Url"]}/{_configuration["BlobStorage:ContainerName"]}/{imageName}";
         await _context.Posts.AddAsync(post);
         await _context.SaveChangesAsync();
     }
